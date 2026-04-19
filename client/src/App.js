@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Folder, Clock, Star, Archive, HelpCircle, HardDrive, Bell, Settings, Plus, FileText, Search, MessageSquare, FileUp, Library } from "lucide-react";
 import './index.css';
 
+const API_BASE = process.env.REACT_APP_API_URL || "https://chat-with-pdf-ai-backend.vercel.app";
+
 function App() {
   const [, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -24,7 +26,7 @@ function App() {
       formData.append("file", selectedFile);
 
       try {
-        const res = await fetch("/api/upload", {
+        const res = await fetch(`${API_BASE}/api/upload`, {
           method: "POST",
           body: formData,
         });
@@ -52,7 +54,7 @@ function App() {
     setLoadingMsg(true);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
