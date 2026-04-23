@@ -3,14 +3,6 @@
     {
       "source": "/api/(.*)",
       "destination": "https://chat-with-pdf-backend-4onz.onrender.com/api/$1"
-    },
-    {
-      "source": "/upload",
-      "destination": "https://chat-with-pdf-backend-4onz.onrender.com/upload"
-    },
-    {
-      "source": "/chat",
-      "destination": "https://chat-with-pdf-backend-4onz.onrender.com/chat"
     }
   ]
 }
