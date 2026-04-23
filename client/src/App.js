@@ -27,7 +27,7 @@ function App() {
       formData.append("file", selectedFile);
 
       try {
-        const res = await fetch(`${API_BASE}/api/upload`, {
+        const res = await fetch("https://chat-with-pdf-backend-4onz.onrender.com/upload", {
           method: "POST",
           body: formData,
         });
