@@ -109,8 +109,7 @@ html, body, #root {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  white-space: nowrap
-  transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .upgrade-btn:hover {
