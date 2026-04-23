@@ -95,7 +95,8 @@ html, body, #root {
 
 .topbar-right {
   display: flex;
-  align-rem;
+  align-items: center;
+  gap: 1rem;
 }
 
 .upgrade-btn {
