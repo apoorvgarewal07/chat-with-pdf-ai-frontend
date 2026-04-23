@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Folder, Clock, Star, Archive, HelpCircle, HardDrive, Bell, Settings, Plus, FileText, Search, MessageSquare, FileUp, Library } from "lucide-react";
 import './index.css';
 
-const API_BASE = process.env.REACT_APP_API_URL || "https://chat-with-pdf-ai-backend.vercel.app";
 
+const API_BASE = process.env.REACT_APP_API_URL || "https://chat-with-pdf-backend-4onz.onrender.com/";
+ 
 function App() {
   const [, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
