@@ -3,7 +3,22 @@ import { Upload, Folder, Clock, Star, Archive, HelpCircle, HardDrive, Bell, Sett
 import './index.css';
 
 
-const API_BASE = process.env.REACT_APP_API_URL || "https://chat-with-pdf-backend-4onz.onrender.com/";
+const API_BASE = (
+  process.env.REACT_APP_API_URL || "https://chat-with-pdf-backend-4onz.onrender.com"
+).replace(/\/+$/, "");
+
+async function parseApiResponse(res) {
+  const contentType = res.headers.get("content-type") || "";
+
+  if (contentType.includes("application/json")) {
+    return res.json();
+  }
+
+  const text = await res.text();
+  return {
+    error: text || `Request failed with status ${res.status}`,
+  };
+}
  
 function App() {
   const [, setFile] = useState(null);
@@ -27,16 +42,16 @@ function App() {
       formData.append("file", selectedFile);
 
       try {
-        const res = await fetch("https://chat-with-pdf-backend-4onz.onrender.com/upload", {
+        const res = await fetch(`${API_BASE}/api/upload`, {
           method: "POST",
           body: formData,
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (res.ok) {
           setUploaded(true);
           setMessages([{ role: "ai", text: `I've successfully analyzed "${selectedFile.name}". What would you like to know about it?` }]);
         } else {
-          alert("Upload failed: " + data.error);
+          alert("Upload failed: " + (data.error || "Unknown server error"));
         }
       } catch (err) {
         alert("Error: " + err.message);
@@ -60,11 +75,11 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
       });
-      const data = await res.json();
+      const data = await parseApiResponse(res);
       if (res.ok) {
         setMessages([...newMsgs, { role: "ai", text: data.answer }]);
       } else {
-        setMessages([...newMsgs, { role: "ai", text: "Error: " + data.error }]);
+        setMessages([...newMsgs, { role: "ai", text: "Error: " + (data.error || "Unknown server error") }]);
       }
     } catch (err) {
       setMessages([...newMsgs, { role: "ai", text: "Error: " + err.message }]);
