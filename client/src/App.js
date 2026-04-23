@@ -19,9 +19,29 @@ import {
 import './index.css';
 
 const API_BASE = (
-  process.env.REACT_APP_API_URL || ""
+  process.env.REACT_APP_API_URL || "hht"
 ).replace(/\/+$/, "");
+function buildApiUrl(path) {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return API_BASE ? `${API_BASE}${normalizedPath}` : normalizedPath;
+}
 
+async function apiFetch(path, options) {
+  const url = buildApiUrl(path);
+  const response = await fetch(url, options);
+
+  if (response.ok || !path.startsWith("/api/")) {
+    return response;
+  }
+
+  if (response.status === 404 || response.status === 405) {
+    const fallbackPath = path.replace(/^\/api/, "") || "/";
+    const fallbackUrl = buildApiUrl(fallbackPath);
+    return fetch(fallbackUrl, options);
+  }
+
+  return response;
+}
 async function parseApiResponse(res) {
   const contentType = res.headers.get("content-type") || "";
 
@@ -56,7 +76,7 @@ function App() {
       formData.append("file", selectedFile);
 
       try {
-        const res = await fetch(`${API_BASE}/api/upload`, {
+        const res = await apiFetch("/api/upload", {
           method: "POST",
           body: formData,
         });
@@ -91,7 +111,7 @@ function App() {
     setLoadingMsg(true);
 
     try {
-      const res = await fetch(`${API_BASE}/api/chat`, {
+      const res = await apiFetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
