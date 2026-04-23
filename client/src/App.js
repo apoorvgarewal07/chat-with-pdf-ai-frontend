@@ -19,7 +19,7 @@ import {
 import './index.css';
 
 const API_BASE = (
-  process.env.REACT_APP_API_URL || "https://chat-with-pdf-backend-4onz.onrender.com"
+  process.env.REACT_APP_API_URL || ""
 ).replace(/\/+$/, "");
 
 async function parseApiResponse(res) {
